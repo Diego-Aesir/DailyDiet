@@ -16,14 +16,23 @@ carbs FLOAT,
 fat FLOAT,
 user_id INT,
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`;
+const CREATE_MEALS_TABLE = `CREATE TABLE IF NOT EXISTS meals (
+id SERIAL PRIMARY KEY,
+name VARCHAR(255) NOT NULL,
+protein FLOAT,
+carbs FLOAT,
+fat FLOAT,
+diet_id INT,
+FOREIGN KEY (diet_id) REFERENCES diets(id) ON DELETE CASCADE)`;
 const CREATE_FOOD_TABLE = `CREATE TABLE IF NOT EXISTS food(
+id SERIAL PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
 amount VARCHAR(255) NOT NULL,
 protein FLOAT NOT NULL,
 carbs FLOAT NOT NULL,
 fat FLOAT NOT NULL,
-diet_id INT,
-FOREIGN KEY (diet_id) REFERENCES diets(id) ON DELETE CASCADE)`;
+meals_id INT,
+FOREIGN KEY (meals_id) REFERENCES meals(id) ON DELETE CASCADE)`;
 
 async function createClient() {
     const client = new Client({
@@ -49,6 +58,7 @@ async function createTables() {
   try {
     await client.query(CREATE_USER_TABLE);
     await client.query(CREATE_DIET_TABLE);
+    await client.query(CREATE_MEALS_TABLE);
     await client.query(CREATE_FOOD_TABLE);
   } catch (err) {
     console.log("Erro while creating Tables", err);
