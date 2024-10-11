@@ -6,7 +6,7 @@ const CREATE_USER_TABLE = `CREATE TABLE IF NOT EXISTS users (
 id SERIAL PRIMARY KEY,
 username VARCHAR(255) NOT NULL UNIQUE,
 password VARCHAR(255) NOT NULL,
-weight FLOAT NULL NOT NULL)`;
+weight FLOAT NOT NULL)`;
 const CREATE_DIET_TABLE = `CREATE TABLE IF NOT EXISTS diets (
 id SERIAL PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
@@ -35,7 +35,6 @@ async function createClient() {
 
 async function createDatabase() {
   const client = await createClient();
-  await client.connect();
   try {
     await client.query(CREATE_DATA_BASE);
   } catch (err) {
@@ -46,10 +45,7 @@ async function createDatabase() {
 }
 
 async function createTables() {
-  const client = new Client({
-    connectionString: "postgresql://diego:123@localhost:5432",
-  });
-  await client.connect();
+  const client = await createClient();
   try {
     await client.query(CREATE_USER_TABLE);
     await client.query(CREATE_DIET_TABLE);
