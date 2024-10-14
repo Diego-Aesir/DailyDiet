@@ -4,16 +4,18 @@ require("dotenv").config();
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-const registerUser = async (username, password, weight) => {
+const registerUser = async (username, password, weight, height, age) => {
   const { rows } = await verifyUserNameExists(username);
   if (rows.length === 0) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const sql = `INSERT INTO users(username, password, weight) VALUES ($1, $2, $3) RETURNING *`;
+    const sql = `INSERT INTO users(username, password, weight, height, age) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
     try {
       const { rows: newUser } = await pool.query(sql, [
         username,
         hashedPassword,
         weight,
+        height,
+        age,
       ]);
       return newUser[0];
     } catch (error) {
@@ -92,22 +94,32 @@ const alterWeight = async (user_id, newWeight) => {
   }
 };
 
-const createNewDiet = async (
-  name,
-  description,
-  protein,
-  carbs,
-  fat,
-  user_id
-) => {
-  const sql = `INSERT INTO diets (name, description, protein, carbs, fat, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+const alterHeight = async (user_id, newHeight) => {
+  const sql = `UPDATE users SET height = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const { rows: updatedUser } = await pool.query(sql, [newHeight, user_id]);
+    return updatedUser[0];
+  } catch (error) {
+    throw new Error("Error while updating height: " + error.message);
+  }
+};
+
+const alterAge = async (user_id, newAge) => {
+  const sql = `UPDATE users SET age = $1 WHERE id = $2 RETURNING *`;
+  try {
+    const { rows: updatedUser } = await pool.query(sql, [newAge, user_id]);
+    return updatedUser[0];
+  } catch (error) {
+    throw new Error("Error while updating age: " + error.message);
+  }
+};
+
+const createNewDiet = async (name, description, user_id) => {
+  const sql = `INSERT INTO diets (name, description, user_id) VALUES ($1, $2, $3) RETURNING *`;
   try {
     const { rows: newDiet } = await pool.query(sql, [
       name,
       description,
-      protein,
-      carbs,
-      fat,
       user_id,
     ]);
     return newDiet[0];
@@ -122,7 +134,7 @@ const getAllDiets = async (user_id) => {
     const { rows: diets } = await pool.query(sql, [user_id]);
     return diets;
   } catch (error) {
-    throw new Error("Error while retriving all user's Diet " + error.message);
+    throw new Error("Error while retriving all user's Diets " + error.message);
   }
 };
 
@@ -139,8 +151,16 @@ const eraseDiet = async (diet_id) => {
   }
 };
 
-const alterDiet = async (diet_id, name, description, protein, carbs, fat) => {
-  const sql = `UPDATE diets SET name = $1, description = $2, protein = $3, carbs = $4, fat = $5 WHERE id = $6 RETURNING *`;
+const alterDiet = async (
+  diet_id,
+  name,
+  description,
+  protein,
+  carbs,
+  fat,
+  calories
+) => {
+  const sql = `UPDATE diets SET name = $1, description = $2, protein = $3, carbs = $4, fat = $5, calories = $6 WHERE id = $7 RETURNING *`;
   try {
     const { rows: updatedDiet } = await pool.query(sql, [
       name,
@@ -148,6 +168,7 @@ const alterDiet = async (diet_id, name, description, protein, carbs, fat) => {
       protein,
       carbs,
       fat,
+      calories,
       diet_id,
     ]);
     return updatedDiet[0];
@@ -156,10 +177,10 @@ const alterDiet = async (diet_id, name, description, protein, carbs, fat) => {
   }
 };
 
-const createNewMeal = async (name, protein, carbs, fat, diet_id) => {
-  const sql = `INSERT INTO meals (name, protein, carbs, fat, diet_id) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+const createNewMeal = async (name, diet_id) => {
+  const sql = `INSERT INTO meals (name, diet_id) VALUES ($1, $2) RETURNING *`;
   try {
-    const { rows: newMeal } = await pool.query(sql, [name, protein, carbs, fat, diet_id]);
+    const { rows: newMeal } = await pool.query(sql, [name, diet_id]);
     return newMeal[0];
   } catch (error) {
     throw new Error("Error while creating a new meal: " + error.message);
@@ -176,10 +197,10 @@ const getAllMealsByDiet = async (diet_id) => {
   }
 };
 
-const eraseMeal = async (meal_id) => {
+const eraseMeal = async (meals_id) => {
   const sql = `DELETE FROM meals WHERE id = $1`;
   try {
-    const result = await pool.query(sql, [meal_id]);
+    const result = await pool.query(sql, [meals_id]);
     if (result.rowCount === 0) {
       throw new Error("No meal found with the given ID.");
     }
@@ -189,10 +210,17 @@ const eraseMeal = async (meal_id) => {
   }
 };
 
-const alterMeal = async (meal_id, name, protein, carbs, fat) => {
-  const sql = `UPDATE meals SET name = $1, protein = $2, carbs = $3, fat = $4 WHERE id = $5 RETURNING *`;
+const alterMeal = async (meals_id, name, protein, carbs, fat, calories) => {
+  const sql = `UPDATE meals SET name = $1, protein = $2, carbs = $3, fat = $4, calories = $5 WHERE id = $6 RETURNING *`;
   try {
-    const { rows: updatedMeal } = await pool.query(sql, [name, protein, carbs, fat, meal_id]);
+    const { rows: updatedMeal } = await pool.query(sql, [
+      name,
+      protein,
+      carbs,
+      fat,
+      calories,
+      meals_id,
+    ]);
     return updatedMeal[0];
   } catch (error) {
     throw new Error("Error while updating this meal: " + error.message);
@@ -202,7 +230,14 @@ const alterMeal = async (meal_id, name, protein, carbs, fat) => {
 const createNewFood = async (name, amount, protein, carbs, fat, meals_id) => {
   const sql = `INSERT INTO food (name, amount, protein, carbs, fat, meals_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
   try {
-    const { rows: newFood } = await pool.query(sql, [name, amount, protein, carbs, fat, meals_id]);
+    const { rows: newFood } = await pool.query(sql, [
+      name,
+      amount,
+      protein,
+      carbs,
+      fat,
+      meals_id,
+    ]);
     return newFood[0];
   } catch (error) {
     throw new Error("Error while creating new food: " + error.message);
@@ -235,13 +270,19 @@ const eraseFood = async (food_id) => {
 const alterFood = async (food_id, name, amount, protein, carbs, fat) => {
   const sql = `UPDATE food SET name = $1, amount = $2, protein = $3, carbs = $4, fat = $5 WHERE id = $6 RETURNING *`;
   try {
-    const { rows: updatedFood } = await pool.query(sql, [name, amount, protein, carbs, fat, food_id]);
+    const { rows: updatedFood } = await pool.query(sql, [
+      name,
+      amount,
+      protein,
+      carbs,
+      fat,
+      food_id,
+    ]);
     return updatedFood[0];
   } catch (error) {
     throw new Error("Error while updating this food item: " + error.message);
   }
 };
-
 
 module.exports = {
   registerUser,
@@ -250,6 +291,8 @@ module.exports = {
   alterUserName,
   alterPassword,
   alterWeight,
+  alterHeight,
+  alterAge,
   createNewDiet,
   getAllDiets,
   eraseDiet,
