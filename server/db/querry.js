@@ -155,3 +155,111 @@ const alterDiet = async (diet_id, name, description, protein, carbs, fat) => {
     throw new Error("Error while altering this Diet " + error.message);
   }
 };
+
+const createNewMeal = async (name, protein, carbs, fat, diet_id) => {
+  const sql = `INSERT INTO meals (name, protein, carbs, fat, diet_id) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+  try {
+    const { rows: newMeal } = await pool.query(sql, [name, protein, carbs, fat, diet_id]);
+    return newMeal[0];
+  } catch (error) {
+    throw new Error("Error while creating a new meal: " + error.message);
+  }
+};
+
+const getAllMealsByDiet = async (diet_id) => {
+  const sql = `SELECT * FROM meals WHERE diet_id = $1`;
+  try {
+    const { rows: meals } = await pool.query(sql, [diet_id]);
+    return meals;
+  } catch (error) {
+    throw new Error("Error while retrieving meals: " + error.message);
+  }
+};
+
+const eraseMeal = async (meal_id) => {
+  const sql = `DELETE FROM meals WHERE id = $1`;
+  try {
+    const result = await pool.query(sql, [meal_id]);
+    if (result.rowCount === 0) {
+      throw new Error("No meal found with the given ID.");
+    }
+    return { success: true, message: "Meal deleted successfully." };
+  } catch (error) {
+    throw new Error("Error while deleting this meal: " + error.message);
+  }
+};
+
+const alterMeal = async (meal_id, name, protein, carbs, fat) => {
+  const sql = `UPDATE meals SET name = $1, protein = $2, carbs = $3, fat = $4 WHERE id = $5 RETURNING *`;
+  try {
+    const { rows: updatedMeal } = await pool.query(sql, [name, protein, carbs, fat, meal_id]);
+    return updatedMeal[0];
+  } catch (error) {
+    throw new Error("Error while updating this meal: " + error.message);
+  }
+};
+
+const createNewFood = async (name, amount, protein, carbs, fat, meals_id) => {
+  const sql = `INSERT INTO food (name, amount, protein, carbs, fat, meals_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+  try {
+    const { rows: newFood } = await pool.query(sql, [name, amount, protein, carbs, fat, meals_id]);
+    return newFood[0];
+  } catch (error) {
+    throw new Error("Error while creating new food: " + error.message);
+  }
+};
+
+const getAllFoodByMeal = async (meals_id) => {
+  const sql = `SELECT * FROM food WHERE meals_id = $1`;
+  try {
+    const { rows: foodItems } = await pool.query(sql, [meals_id]);
+    return foodItems;
+  } catch (error) {
+    throw new Error("Error while retrieving food items: " + error.message);
+  }
+};
+
+const eraseFood = async (food_id) => {
+  const sql = `DELETE FROM food WHERE id = $1`;
+  try {
+    const result = await pool.query(sql, [food_id]);
+    if (result.rowCount === 0) {
+      throw new Error("No food item found with the given ID.");
+    }
+    return { success: true, message: "Food item deleted successfully." };
+  } catch (error) {
+    throw new Error("Error while deleting this food item: " + error.message);
+  }
+};
+
+const alterFood = async (food_id, name, amount, protein, carbs, fat) => {
+  const sql = `UPDATE food SET name = $1, amount = $2, protein = $3, carbs = $4, fat = $5 WHERE id = $6 RETURNING *`;
+  try {
+    const { rows: updatedFood } = await pool.query(sql, [name, amount, protein, carbs, fat, food_id]);
+    return updatedFood[0];
+  } catch (error) {
+    throw new Error("Error while updating this food item: " + error.message);
+  }
+};
+
+
+module.exports = {
+  registerUser,
+  loginUser,
+  verifyUserNameExists,
+  alterUserName,
+  alterPassword,
+  alterWeight,
+  createNewDiet,
+  getAllDiets,
+  eraseDiet,
+  alterDiet,
+  createNewMeal,
+  getAllMealsByDiet,
+  eraseMeal,
+  alterMeal,
+  createNewFood,
+  getAllFoodByMeal,
+  eraseFood,
+  alterFood,
+};
