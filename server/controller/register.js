@@ -9,12 +9,7 @@ const register = async (req, res) => {
   if (!username || !password) {
     return res
       .status(400)
-      .json({ message: "Username and password are required." });
-  }
-
-  const fieldsError = validationResult(req);
-  if (!fieldsError.isEmpty()) {
-    return res.status(400).json({ message: fieldsError.array() });
+      .json({ error: true, message: "Username and password are required." });
   }
 
   try {

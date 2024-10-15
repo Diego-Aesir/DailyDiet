@@ -8,14 +8,16 @@ const loginUser = async (req, res) => {
   if (!username || !password) {
     return res
       .status(400)
-      .json({ message: "Username and password are required." });
+      .json({ error: true, message: "Username and password are required." });
   }
 
   try {
     const user_id = await db.loginUser(username, password);
 
     if (!user_id) {
-      return res.status(401).json({ message: "Invalid username or password." });
+      return res
+        .status(401)
+        .json({ error: true, message: "Invalid username or password." });
     }
 
     const secret = generateToken(username, password, Date.now().toString());
@@ -23,7 +25,7 @@ const loginUser = async (req, res) => {
 
     return res.status(200).json({ user_id, token });
   } catch (error) {
-    return res.status(401).json({ message: error.message });
+    return res.status(401).json({ error: true, message: error.message });
   }
 };
 

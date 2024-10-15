@@ -70,6 +70,16 @@ const alterUserName = async (user_id, newUserName) => {
   }
 };
 
+const getUser = async (user_id) => {
+  const sql = `SELECT * FROM users WHERE id = $1`;
+  try {
+    const {rows:user} = await pool.query(sql, [user_id]);
+    return user[0];
+  } catch (error) {
+    throw new Error('Couldn\'t find this user');
+  }
+}
+
 const alterPassword = async (user_id, newPassword) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   const sql = `UPDATE users SET password = $1 WHERE id = $2 RETURNING *`;
@@ -113,6 +123,19 @@ const alterAge = async (user_id, newAge) => {
     throw new Error("Error while updating age: " + error.message);
   }
 };
+
+const eraseUser = async (user_id) => {
+  const sql = `DELETE FROM users WHERE id = $1`;
+  try {
+    const result = await pool.query(sql, [user_id]);
+    if (result.rowCount === 0) {
+      throw new Error("No user found with the given ID.");
+    }
+    return { success: true, message: "User deleted successfully." };
+  } catch (error) {
+    throw new Error('Error while deleting user ' + error.message);
+  }
+}
 
 const createNewDiet = async (name, description, user_id) => {
   const sql = `INSERT INTO diets (name, description, user_id) VALUES ($1, $2, $3) RETURNING *`;
@@ -288,11 +311,13 @@ module.exports = {
   registerUser,
   loginUser,
   verifyUserNameExists,
+  getUser,
   alterUserName,
   alterPassword,
   alterWeight,
   alterHeight,
   alterAge,
+  eraseUser,
   createNewDiet,
   getAllDiets,
   eraseDiet,
