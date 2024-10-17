@@ -1,6 +1,6 @@
 const db = require("../db/query");
 const jwt = require("jsonwebtoken");
-const generateToken = require("../token/tokenGenerator");
+require('dotenv').config();
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
@@ -20,8 +20,7 @@ const loginUser = async (req, res) => {
         .json({ error: true, message: "Invalid username or password." });
     }
 
-    const secret = generateToken(username, password, Date.now().toString());
-    const token = jwt.sign({ id: user_id }, secret, { expiresIn: "3h" });
+    const token = jwt.sign({ id: user_id }, process.env.JWT_SECRET, { expiresIn: "3h" });
 
     return res.status(200).json({ user_id, token });
   } catch (error) {

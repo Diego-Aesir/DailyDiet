@@ -12,16 +12,6 @@ const dietValidation = () => [
     .trim()
     .isLength({ min: 1, max: 200 })
     .withMessage("Description must be between 1 and 200 characters long."),
-
-  body("user_id")
-    .optional()
-    .isNumeric()
-    .withMessage("User id must be a number."),
-
-  body("diet_id")
-    .optional()
-    .isNumeric()
-    .withMessage("Diet id must be a number."),
 ];
 
 module.exports = dietValidation;

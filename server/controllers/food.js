@@ -2,7 +2,7 @@ const db = require("../db/query");
 
 const foodController = {
   getFood: async (req, res) => {
-    const { meals_id } = req.query;
+    const { meals_id } = req.body;
 
     if (!meals_id) {
       return res

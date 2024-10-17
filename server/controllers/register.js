@@ -1,7 +1,6 @@
 const db = require("../db/query");
-const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const generateToken = require("../token/tokenGenerator");
+require('dotenv').config();
 
 const register = async (req, res) => {
   const { username, password, weight, height, age } = req.body;
@@ -21,9 +20,8 @@ const register = async (req, res) => {
       age
     );
 
-    const secret = generateToken(username, password, Date.now().toString());
     if (registered) {
-      const token = jwt.sign({ id: registered.id }, secret, {
+      const token = jwt.sign({ id: registered.id }, process.env.JWT_SECRET, {
         expiresIn: "3h",
       });
       return res.status(200).json({ User: registered, Token: token });

@@ -2,16 +2,16 @@ const db = require("../db/query");
 
 const userPage = {
   getUserInfo: async (req, res) => {
-    const { user_id } = req.query;
+    const { id } = req.params;
 
-    if (!user_id) {
+    if (!id) {
       return res
         .status(400)
         .json({ error: true, message: "User id is required." });
     }
 
     try {
-      const userInfo = await db.getUser(user_id);
+      const userInfo = await db.getUser(id);
       return res.status(200).json(userInfo);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
@@ -19,9 +19,10 @@ const userPage = {
   },
 
   changeUserName: async (req, res) => {
-    const { user_id, newUsername } = req.body;
+    const { id } = req.params;
+    const { newUsername } = req.body;
 
-    if (!user_id || !newUsername) {
+    if (!id || !newUsername) {
       return res.status(400).json({
         error: true,
         message: "User id and new username are required.",
@@ -29,7 +30,7 @@ const userPage = {
     }
 
     try {
-      const alteredUser = await db.alterUserName(user_id, newUsername);
+      const alteredUser = await db.alterUserName(id, newUsername);
       return res.status(200).json(alteredUser);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
@@ -37,9 +38,10 @@ const userPage = {
   },
 
   changeUserPassword: async (req, res) => {
-    const { user_id, newPassword } = req.body;
+    const { id } = req.params;
+    const { newPassword } = req.body;
 
-    if (!user_id || !newPassword) {
+    if (!id || !newPassword) {
       return res.status(400).json({
         error: true,
         message: "User id and new password are required.",
@@ -47,7 +49,7 @@ const userPage = {
     }
 
     try {
-      const alteredUser = await db.alterPassword(user_id, newPassword);
+      const alteredUser = await db.alterPassword(id, newPassword);
       return res.status(200).json(alteredUser);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
@@ -55,16 +57,17 @@ const userPage = {
   },
 
   changeUserWeight: async (req, res) => {
-    const { user_id, newWeight } = req.body;
+    const { id } = req.params;
+    const { newWeight } = req.body;
 
-    if (!user_id || !newWeight) {
+    if (!id || !newWeight) {
       return res
         .status(400)
         .json({ error: true, message: "User id and new weight are required." });
     }
 
     try {
-      const alteredUser = await db.alterWeight(user_id, newWeight);
+      const alteredUser = await db.alterWeight(id, newWeight);
       return res.status(200).json(alteredUser);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
@@ -72,16 +75,17 @@ const userPage = {
   },
 
   changeUserHeight: async (req, res) => {
-    const { user_id, newHeight } = req.body;
+    const { id } = req.params;
+    const { newHeight } = req.body;
 
-    if (!user_id || !newHeight) {
+    if (!id || !newHeight) {
       return res
         .status(400)
         .json({ error: true, message: "User id and new height are required." });
     }
 
     try {
-      const alteredUser = await db.alterHeight(user_id, newHeight);
+      const alteredUser = await db.alterHeight(id, newHeight);
       return res.status(200).json(alteredUser);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
@@ -89,16 +93,17 @@ const userPage = {
   },
 
   changeUserAge: async (req, res) => {
-    const { user_id, newAge } = req.body;
+    const { id } = req.params;
+    const { newAge } = req.body;
 
-    if (!user_id || !newAge) {
+    if (!id || !newAge) {
       return res
         .status(400)
         .json({ error: true, message: "User id and new age are required." });
     }
 
     try {
-      const alteredUser = await db.alterAge(user_id, newAge);
+      const alteredUser = await db.alterAge(id, newAge);
       return res.status(200).json(alteredUser);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
@@ -106,19 +111,21 @@ const userPage = {
   },
 
   deleteUser: async (req, res) => {
-    const { user_id } = req.body;
+    const { id } = req.params;
 
-    if (!user_id) {
+    if (!id) {
       return res
         .status(400)
         .json({ error: true, message: "User id is required." });
     }
 
     try {
-      const response = await db.eraseUser(user_id);
+      const response = await db.eraseUser(id);
       return res.status(200).json(response);
     } catch (error) {
       return res.status(500).json({ error: true, message: error.message });
     }
   },
 };
+
+module.exports = userPage;

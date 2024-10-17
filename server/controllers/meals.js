@@ -2,16 +2,16 @@ const db = require("../db/query");
 
 const mealsController = {
   getMeals: async (req, res) => {
-    const { diet_id } = req.query;
+    const { diet } = req.params;
 
-    if (!diet_id) {
+    if (!diet) {
       return res
         .status(400)
         .json({ error: true, message: "Diet id is required." });
     }
 
     try {
-      const allMeals = await db.getAllMealsByDiet(diet_id);
+      const allMeals = await db.getAllMealsByDiet(diet);
       return res.status(200).json({ allMeals });
     } catch (error) {
       return res.status(500).json({
@@ -22,16 +22,17 @@ const mealsController = {
   },
 
   postMeals: async (req, res) => {
-    const { name, diet_id } = req.body;
+    const { diet } = req.params;
+    const { name } = req.body;
 
-    if (!diet_id || !name) {
+    if (!diet || !name) {
       return res
         .status(400)
         .json({ error: true, message: "Diet id and Meals Name are required." });
     }
 
     try {
-      const newMeal = await db.createNewMeal(name, diet_id);
+      const newMeal = await db.createNewMeal(name, diet);
       return res.status(201).json({ newMeal });
     } catch (error) {
       return res.status(500).json({
@@ -51,20 +52,7 @@ const mealsController = {
     }
 
     try {
-      const allFoods = await db.getAllFoodByMeal(meals_id);
-      const protein = getProtein(allFoods);
-      const carbs = getCarbs(allFoods);
-      const fat = getFat(allFoods);
-      const calories = calculateMealCalories(protein, carbs, fat);
-
-      const alteredMeals = await db.alterMeal(
-        meals_id,
-        name,
-        protein,
-        carbs,
-        fat,
-        calories
-      );
+      const alteredMeals = await db.putMeal(meals_id, name);
       return res.status(200).json({ alteredMeals });
     } catch (error) {
       return res.status(500).json({
@@ -94,21 +82,5 @@ const mealsController = {
     }
   },
 };
-
-function getProtein(allFoods) {
-  return allFoods.reduce((total, food) => total + food.protein, 0);
-}
-
-function getCarbs(allFoods) {
-  return allFoods.reduce((total, food) => total + food.carbs, 0);
-}
-
-function getFat(allFoods) {
-  return allFoods.reduce((total, food) => total + food.fat, 0);
-}
-
-function calculateMealCalories(protein, carbs, fat) {
-  return protein * 4 + carbs * 4 + fat * 9;
-}
 
 module.exports = mealsController;

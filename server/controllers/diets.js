@@ -1,17 +1,17 @@
 const db = require("../db/query");
 
 const dietsController = {
-  getDiets: async (req, res) => {
-    const { user_id } = req.query;
+  getAllDiets: async (req, res) => {
+    const { id } = req.params;
 
-    if (!user_id) {
+    if (!id) {
       return res
         .status(400)
         .json({ error: true, message: "User id is required." });
     }
 
     try {
-      const diets = await db.getAllDiets(user_id);
+      const diets = await db.getAllDiets(id);
       return res.status(200).json({ diets });
     } catch (error) {
       return res
@@ -21,9 +21,10 @@ const dietsController = {
   },
 
   postDiet: async (req, res) => {
-    const { name, description, user_id } = req.body;
+    const { id } = req.params;
+    const { name, description } = req.body;
 
-    if (!user_id || !name || !description) {
+    if (!id || !name || !description) {
       return res.status(400).json({
         error: true,
         message: "User id, name and description are required.",
@@ -31,7 +32,7 @@ const dietsController = {
     }
 
     try {
-      const newDiet = await db.createNewDiet(name, description, user_id);
+      const newDiet = await db.createNewDiet(name, description, id);
       return res.status(201).json({ newDiet });
     } catch (error) {
       return res
@@ -41,9 +42,10 @@ const dietsController = {
   },
 
   putDiet: async (req, res) => {
-    const { diet_id, name, description } = req.body;
+    const { diet } = req.params;
+    const { name, description } = req.body;
 
-    if (!diet_id || !name || !description) {
+    if (!diet || !name || !description) {
       return res.status(400).json({
         error: true,
         message: "Diet id, name and description are required.",
@@ -51,21 +53,7 @@ const dietsController = {
     }
 
     try {
-      const meals = await db.getAllMealsByDiet(diet_id);
-      const protein = getProteinValues(meals);
-      const carbs = getCarbsValues(meals);
-      const fat = getFatValues(meals);
-      const calories = calculateCalories(protein, carbs, fat);
-
-      const updatedDiet = await db.alterDiet(
-        diet_id,
-        name,
-        description,
-        protein,
-        carbs,
-        fat,
-        calories
-      );
+      const updatedDiet = await db.putDiet(diet, name, description);
       return res.status(200).json({ updatedDiet });
     } catch (error) {
       return res
@@ -75,16 +63,16 @@ const dietsController = {
   },
 
   deleteDiet: async (req, res) => {
-    const { diet_id } = req.body;
+    const { diet } = req.params;
 
-    if (!diet_id) {
+    if (!diet) {
       return res
         .status(400)
         .json({ error: true, message: "Diet id is required." });
     }
 
     try {
-      const deletedMessage = await db.eraseDiet(diet_id);
+      const deletedMessage = await db.eraseDiet(diet);
       return res.status(200).json({ deletedMessage });
     } catch (error) {
       return res
@@ -93,21 +81,5 @@ const dietsController = {
     }
   },
 };
-
-function getProteinValues(meals) {
-  return meals.reduce((total, meal) => total + meal.protein, 0);
-}
-
-function getCarbsValues(meals) {
-  return meals.reduce((total, meal) => total + meal.carbs, 0);
-}
-
-function getFatValues(meals) {
-  return meals.reduce((total, meal) => total + meal.fat, 0);
-}
-
-function calculateCalories(protein, carbs, fat) {
-  return protein * 4 + carbs * 4 + fat * 9;
-}
 
 module.exports = dietsController;
