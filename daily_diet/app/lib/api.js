@@ -306,7 +306,7 @@ export const postLogin = async (user_username, user_password) => {
 };
 
 export const getUserInfo = async (user_id, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -322,7 +322,7 @@ export const getUserInfo = async (user_id, token) => {
 };
 
 export const putUserName = async (user_id, user_newUsername, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}/username`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/username`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -341,7 +341,7 @@ export const putUserName = async (user_id, user_newUsername, token) => {
 };
 
 export const putUserPassword = async (user_id, user_newPassword, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}/password`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/password`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -360,7 +360,7 @@ export const putUserPassword = async (user_id, user_newPassword, token) => {
 };
 
 export const putUserWeight = async (user_id, user_newWeight, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}/weight`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/weight`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -379,7 +379,7 @@ export const putUserWeight = async (user_id, user_newWeight, token) => {
 };
 
 export const putUserHeight = async (user_id, user_newHeight, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}/height`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/height`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -398,7 +398,7 @@ export const putUserHeight = async (user_id, user_newHeight, token) => {
 };
 
 export const putUserAge = async (user_id, user_newAge, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}/age`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/age`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -417,7 +417,7 @@ export const putUserAge = async (user_id, user_newAge, token) => {
 };
 
 export const deleteUser = async (user_id, token) => {
-  const response = await fetch(`${API_URL}/user/${user_id}`, {
+  const response = await fetch(`${API_URL}/${user_id}/user/delete`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

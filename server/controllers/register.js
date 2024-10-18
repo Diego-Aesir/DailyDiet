@@ -5,10 +5,10 @@ require('dotenv').config();
 const register = async (req, res) => {
   const { username, password, weight, height, age } = req.body;
 
-  if (!username || !password) {
+  if (!username || !password || !weight || !height || !age) {
     return res
       .status(400)
-      .json({ error: true, message: "Username and password are required." });
+      .json({ error: true, message: "Username, password, weight, height, age are required." });
   }
 
   try {

@@ -21,8 +21,8 @@ app.use(express.json());
 app.post('/register', fieldsValidation, handleValidationErrors, registerController);
 app.post('/login', fieldsValidation, handleValidationErrors, loginController);
 
-app.use('/user', userRoutes);
-app.use('/', dietsRoutes);
+app.use('/:id', dietsRoutes);
+app.use('/:id/user', userRoutes);
 
 async function startServer() {
     await initDB.main();

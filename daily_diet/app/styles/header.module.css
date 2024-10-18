@@ -1,25 +1,28 @@
 .headerContainer {
-    background-color: #4C6B6E;
-    color: #F0F0F0;
+    background-color: #5C9B5A;
+    color: #FFFFFF;
     width: 100vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 14px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 16px 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     align-items: center;
-    align-content: center;
 }
 
 .loginContainer {
     margin-left: auto;
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 15px;
     align-items: center;
-    align-content: center;
 }
 
 .logo {
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
