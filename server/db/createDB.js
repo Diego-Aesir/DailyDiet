@@ -38,16 +38,16 @@ fat FLOAT NOT NULL,
 meals_id INT,
 FOREIGN KEY (meals_id) REFERENCES meals(id) ON DELETE CASCADE)`;
 
-async function createClient() {
+async function createClient(db) {
     const client = new Client({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: db,
     });
     await client.connect();
     return client;
 }
 
 async function createDatabase() {
-  const client = await createClient();
+  const client = await createClient(process.env.DATABASE_CREATION_URL);
   try {
     await client.query(CREATE_DATA_BASE);
   } catch (err) {
@@ -58,7 +58,7 @@ async function createDatabase() {
 }
 
 async function createTables() {
-  const client = await createClient();
+  const client = await createClient(process.env.DATABASE_URL);
   try {
     await client.query(CREATE_USER_TABLE);
     await client.query(CREATE_DIET_TABLE);
@@ -77,6 +77,8 @@ async function main() {
     await createTables();
   } catch (err) {
     console.log("Error while creating database or table", err);
+  } finally {
+    console.log('Database ready for use');
   }
 }
 

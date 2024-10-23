@@ -7,6 +7,7 @@ const userRoutes = require('./routes/userPageRoutes');
 const dietsRoutes = require('./routes/dietsRoutes');
 const initDB = require('./db/createDB');
 const {fieldsValidation, handleValidationErrors} = require('./validators/fieldsValidation');
+const loginValidation = require('./validators/loginValidation');
 
 const PORT = 8000;
 const allowed = ['http://localhost:3000'];
@@ -18,11 +19,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.post('/register', fieldsValidation, handleValidationErrors, registerController);
-app.post('/login', fieldsValidation, handleValidationErrors, loginController);
+app.post('/register', fieldsValidation(), handleValidationErrors, registerController);
+app.post('/login', loginValidation(), handleValidationErrors, loginController);
 
-app.use('/:id', dietsRoutes);
-app.use('/:id/user', userRoutes);
+app.use('/diets', dietsRoutes);
+app.use('/user', userRoutes);
+
 
 async function startServer() {
     await initDB.main();

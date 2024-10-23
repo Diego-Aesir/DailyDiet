@@ -2,7 +2,7 @@ const db = require("../db/query");
 
 const mealsController = {
   getMeals: async (req, res) => {
-    const { diet } = req.params;
+    const diet = req.params.diet;
 
     if (!diet) {
       return res
@@ -22,7 +22,7 @@ const mealsController = {
   },
 
   postMeals: async (req, res) => {
-    const { diet } = req.params;
+    const diet = req.params.diet;
     const { name } = req.body;
 
     if (!diet || !name) {

@@ -2,8 +2,8 @@ const db = require("../db/query");
 
 const userPage = {
   getUserInfo: async (req, res) => {
-    const { id } = req.params;
-
+    const id = req.params.id;
+    
     if (!id) {
       return res
         .status(400)
@@ -19,7 +19,7 @@ const userPage = {
   },
 
   changeUserName: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { newUsername } = req.body;
 
     if (!id || !newUsername) {
@@ -38,7 +38,7 @@ const userPage = {
   },
 
   changeUserPassword: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { newPassword } = req.body;
 
     if (!id || !newPassword) {
@@ -57,7 +57,7 @@ const userPage = {
   },
 
   changeUserWeight: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { newWeight } = req.body;
 
     if (!id || !newWeight) {
@@ -75,7 +75,7 @@ const userPage = {
   },
 
   changeUserHeight: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { newHeight } = req.body;
 
     if (!id || !newHeight) {
@@ -93,7 +93,7 @@ const userPage = {
   },
 
   changeUserAge: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { newAge } = req.body;
 
     if (!id || !newAge) {
@@ -111,7 +111,7 @@ const userPage = {
   },
 
   deleteUser: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
 
     if (!id) {
       return res

@@ -11,34 +11,28 @@ export default function Header() {
   const [logged, setLogged] = useState(false);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const path = window.location.pathname;
-    const userPattern = /^\/\d+($|\/.*)/;
+  const fetchUserInfo = async () => {
+    const user_id = localStorage.getItem("user_id");
+    const token = localStorage.getItem("token");
 
-    const fetchUserInfo = async () => {
-      const user_id = localStorage.getItem("user_id");
-      const token = localStorage.getItem("token");
-
-      if (!user_id || !token) {
-        setLogged(false);
-        return;
-      }
-
-      try {
-        const userInfo = await getUserInfo(user_id, token);
-        setUser(userInfo);
-        setLogged(true);
-      } catch (error) {
-        console.error("Erro ao obter informações do usuário:", error);
-        setLogged(false);
-      }
-    };
-
-    if (userPattern.test(path)) {
-      fetchUserInfo();
-    } else {
+    if (!user_id || !token) {
       setLogged(false);
+      return;
     }
+
+    try {
+      const userInfo = await getUserInfo(user_id, token);
+      setUser(userInfo);
+      setLogged(true);
+    } catch (error) {
+      console.error("Erro ao obter informações do usuário:", error.message);
+      setLogged(false);
+      await fetchUserInfo();
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
   }, []);
 
   const mainPage = () => {
@@ -51,6 +45,11 @@ export default function Header() {
 
   const pushRegister = () => {
     route.push("/register");
+  };
+
+  const pushUserPage = () => {
+    const user_id = localStorage.getItem("user_id");
+    route.push(`/${user_id}`);
   };
 
   return (
@@ -75,7 +74,9 @@ export default function Header() {
             />
           </>
         ) : (
-          <h3 className={styles.logo}>{user?.username}</h3>
+          <h3 className={styles.logo} onClick={pushUserPage}>
+            {user?.username}
+          </h3>
         )}
       </div>
     </div>

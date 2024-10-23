@@ -50,11 +50,6 @@ export default function Register() {
       return false;
     }
 
-    if (!/^\d+(\,\d{1,2})?$/.test(height)) {
-      setError("A altura deve ser um número com até duas casas decimais.");
-      return false;
-    }
-
     const parsedHeight = parseFloat(height.replace(",", "."));
     if (parsedHeight < 0.3 || parsedHeight > 3.0) {
       setError("A altura deve estar entre 0,30 e 3,00 metros.");

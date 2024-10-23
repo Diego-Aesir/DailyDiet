@@ -2,8 +2,7 @@ const db = require("../db/query");
 
 const dietsController = {
   getAllDiets: async (req, res) => {
-    const { id } = req.params;
-
+    const id = req.params.id;
     if (!id) {
       return res
         .status(400)
@@ -21,7 +20,7 @@ const dietsController = {
   },
 
   postDiet: async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { name, description } = req.body;
 
     if (!id || !name || !description) {
@@ -42,7 +41,7 @@ const dietsController = {
   },
 
   putDiet: async (req, res) => {
-    const { diet } = req.params;
+    const diet = req.params.diet;
     const { name, description } = req.body;
 
     if (!diet || !name || !description) {
@@ -63,7 +62,8 @@ const dietsController = {
   },
 
   deleteDiet: async (req, res) => {
-    const { diet } = req.params;
+    console.log('Tentei');
+    const diet = req.params.diet;
 
     if (!diet) {
       return res

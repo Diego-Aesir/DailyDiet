@@ -6,10 +6,10 @@ const mealsValidator = require('../validators/mealsValidation');
 const {handleValidationErrors} = require('../validators/fieldsValidation');
 const foodRouter = require('./foodRoutes');
 
-router.get('/meals', authenticateUser, mealController.getMeals);
-router.post('/meals', authenticateUser, mealsValidator, handleValidationErrors, mealController.postMeals);
-router.put('/meals', authenticateUser, mealsValidator, handleValidationErrors, mealController.putMeals);
-router.delete('/meals', authenticateUser, mealController.deleteMeals);
-router.use('/meals', foodRouter);
+router.get('/:id/:diet/meals', authenticateUser, mealController.getMeals);
+router.post('/:id/:diet/meals', authenticateUser, mealsValidator(), handleValidationErrors, mealController.postMeals);
+router.put('/:id/:diet/meals', authenticateUser, mealsValidator(), handleValidationErrors, mealController.putMeals);
+router.delete('/:id/:diet/meals', authenticateUser, mealController.deleteMeals);
+router.use('/:id/:diet/meals', foodRouter);
 
 module.exports = router;

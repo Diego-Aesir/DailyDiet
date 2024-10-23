@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:8000/";
+const API_URL = "http://localhost:8000";
 
 export const getAllDiets = async (user_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -16,8 +16,8 @@ export const getAllDiets = async (user_id, token) => {
   return await response.json();
 };
 
-export const postDiet = async (user_id, diet_name, diet_description, token) => {
-  const response = await fetch(`${API_URL}/${user_id}`, {
+export const postDiets = async (user_id, diet_name, diet_description, token) => {
+  const response = await fetch(`${API_URL}/diets/${user_id}`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -36,14 +36,14 @@ export const postDiet = async (user_id, diet_name, diet_description, token) => {
   return await response.json();
 };
 
-export const putDiet = async (
+export const putDiets = async (
   user_id,
   diet_id,
   diet_name,
   diet_description,
   token
 ) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -62,8 +62,8 @@ export const putDiet = async (
   return await response.json();
 };
 
-export const deleteDiet = async (user_id, diet_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}`, {
+export const deleteDiets = async (user_id, diet_id, token) => {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -79,7 +79,7 @@ export const deleteDiet = async (user_id, diet_id, token) => {
 };
 
 export const getAllMeals = async (user_id, diet_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ export const getAllMeals = async (user_id, diet_id, token) => {
 };
 
 export const postMeal = async (user_id, diet_id, meal_name, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -114,7 +114,7 @@ export const postMeal = async (user_id, diet_id, meal_name, token) => {
 };
 
 export const putMeal = async (user_id, diet_id, name, meal_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -134,7 +134,7 @@ export const putMeal = async (user_id, diet_id, name, meal_id, token) => {
 };
 
 export const deleteMeal = async (user_id, diet_id, meal_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -153,7 +153,7 @@ export const deleteMeal = async (user_id, diet_id, meal_id, token) => {
 };
 
 export const getAllFood = async (user_id, diet_id, meal_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals/food`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -182,7 +182,7 @@ export const postFood = async (
   food_fat,
   token
 ) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals/food`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -216,8 +216,7 @@ export const putFood = async (
   food_fat,
   token
 ) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals/food`, {
-    method: "PUT",
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -240,7 +239,7 @@ export const putFood = async (
 };
 
 export const deleteFood = async (user_id, diet_id, food_Id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/${diet_id}/meals/food`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -306,7 +305,7 @@ export const postLogin = async (user_username, user_password) => {
 };
 
 export const getUserInfo = async (user_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/`, {
+  const response = await fetch(`${API_URL}/user/${user_id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -322,7 +321,7 @@ export const getUserInfo = async (user_id, token) => {
 };
 
 export const putUserName = async (user_id, user_newUsername, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/username`, {
+  const response = await fetch(`${API_URL}/user/${user_id}/username`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -341,7 +340,7 @@ export const putUserName = async (user_id, user_newUsername, token) => {
 };
 
 export const putUserPassword = async (user_id, user_newPassword, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/password`, {
+  const response = await fetch(`${API_URL}/user/${user_id}/password`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -360,7 +359,7 @@ export const putUserPassword = async (user_id, user_newPassword, token) => {
 };
 
 export const putUserWeight = async (user_id, user_newWeight, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/weight`, {
+  const response = await fetch(`${API_URL}/user/${user_id}/weight`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -379,7 +378,7 @@ export const putUserWeight = async (user_id, user_newWeight, token) => {
 };
 
 export const putUserHeight = async (user_id, user_newHeight, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/height`, {
+  const response = await fetch(`${API_URL}/user/${user_id}/height`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -398,7 +397,7 @@ export const putUserHeight = async (user_id, user_newHeight, token) => {
 };
 
 export const putUserAge = async (user_id, user_newAge, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/age`, {
+  const response = await fetch(`${API_URL}/user/${user_id}/age`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -417,7 +416,7 @@ export const putUserAge = async (user_id, user_newAge, token) => {
 };
 
 export const deleteUser = async (user_id, token) => {
-  const response = await fetch(`${API_URL}/${user_id}/user/delete`, {
+  const response = await fetch(`${API_URL}/user/${user_id}/delete`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
