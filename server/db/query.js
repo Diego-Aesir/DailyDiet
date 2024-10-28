@@ -251,7 +251,7 @@ const createNewMeal = async (name, diet_id) => {
 };
 
 const getAllMealsByDiet = async (diet_id) => {
-  const sql = `SELECT * FROM meals WHERE diet_id = $1`;
+  const sql = `SELECT * FROM meals WHERE diet_id = $1 ORDER BY id ASC`;
   try {
     const { rows: meals } = await pool.query(sql, [diet_id]);
     return meals;
@@ -273,6 +273,9 @@ const getMealById = async (meal_id) => {
 const eraseMeal = async (meals_id) => {
   const sql = `DELETE FROM meals WHERE id = $1`;
   try {
+    const foods = await getAllFoodByMeal(meals_id);
+    await Promise.all(foods.map((food) => eraseFood(food.id)));
+
     const result = await pool.query(sql, [meals_id]);
     if (result.rowCount === 0) {
       throw new Error("No meal found with the given ID.");
@@ -349,7 +352,10 @@ const getFoodById = async (food_id) => {
 };
 
 const eraseFood = async (food_id) => {
-  const food = getFoodById(food_id);
+  const food = await getFoodById(food_id);
+  if (!food) {
+    throw new Error("Food item not found.");
+  }
   const sql = `DELETE FROM food WHERE id = $1`;
   try {
     const result = await pool.query(sql, [food_id]);
@@ -367,7 +373,7 @@ const alterFood = async (food_id, name, amount, protein, carbs, fat) => {
   const sql = `UPDATE food SET name = $1, amount = $2, protein = $3, carbs = $4, fat = $5 WHERE id = $6 RETURNING *`;
   try {
     const actualFood = await getFoodById(food_id);
-    deleteMealValuesByFood(actualFood);
+    await deleteMealValuesByFood(actualFood);
     const { rows: updatedFood } = await pool.query(sql, [
       name,
       amount,
@@ -394,24 +400,24 @@ const addMealValuesByFood = async (food) => {
     const calories = calculateCalories(protein, carbs, fat);
 
     await alterMeal(meal.id, meal.name, protein, carbs, fat, calories);
-    await addDietValuesByMeal(meal.diet_id, protein, carbs, fat);
+    await addDietValuesByFood(meal.diet_id, food.protein, food.carbs, food.fat);
   } catch (error) {
     throw new Error("Error while updating this Meal values: " + error.message);
   }
 };
 
-const addDietValuesByMeal = async (
+const addDietValuesByFood = async (
   diet_id,
-  meals_protein,
-  meal_carbs,
-  meal_fat
+  added_protein,
+  added_carbs,
+  added_fat
 ) => {
   try {
     const diet = await getDietById(diet_id);
 
-    const protein = sumProtein(diet.protein, meals_protein);
-    const carbs = sumCarbs(diet.carbs, meal_carbs);
-    const fat = sumFat(diet.fat, meal_fat);
+    const protein = sumProtein(diet.protein, added_protein);
+    const carbs = sumCarbs(diet.carbs, added_carbs);
+    const fat = sumFat(diet.fat, added_fat);
     const calories = calculateCalories(protein, carbs, fat);
 
     await alterDiet(
@@ -439,24 +445,29 @@ const deleteMealValuesByFood = async (food) => {
     const calories = calculateCalories(protein, carbs, fat);
 
     await alterMeal(meal.id, meal.name, protein, carbs, fat, calories);
-    await deleteDietValuesByMeal(meal.diet_id, protein, carbs, fat);
+    await deleteDietValuesByFood(
+      meal.diet_id,
+      food.protein,
+      food.carbs,
+      food.fat
+    );
   } catch (error) {
     throw new Error("Error while deleting this Meal values: " + error.message);
   }
 };
 
-const deleteDietValuesByMeal = async (
+const deleteDietValuesByFood = async (
   diet_id,
-  meals_protein,
-  meal_carbs,
-  meal_fat
+  lost_protein,
+  lost_carbs,
+  lost_fat
 ) => {
   try {
     const diet = await getDietById(diet_id);
 
-    const protein = decreaseProtein(diet.protein, meals_protein);
-    const carbs = decreaseCarbs(diet.carbs, meal_carbs);
-    const fat = decreaseFat(diet.fat, meal_fat);
+    const protein = decreaseProtein(diet.protein, lost_protein);
+    const carbs = decreaseCarbs(diet.carbs, lost_carbs);
+    const fat = decreaseFat(diet.fat, lost_fat);
 
     const calories = calculateCalories(protein, carbs, fat);
 
@@ -487,6 +498,7 @@ module.exports = {
   eraseUser,
   createNewDiet,
   getAllDiets,
+  getDietById,
   eraseDiet,
   putDiet,
   alterDiet,

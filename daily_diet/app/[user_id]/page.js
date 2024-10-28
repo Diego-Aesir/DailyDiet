@@ -103,27 +103,33 @@ const UserMainPage = () => {
         {isLoading && <div className={styles.loading}>Carregando...</div>}
         <div className={styles.characterSide}>
           <h1 className={styles.charInfo}>Bem-vindo {user.username}</h1>
-          <br/>
-          <div className={styles.imageDiv}>
-            <Image
-              src="/manChar.png"
-              alt="man character"
-              width={270}
-              height={270}
-              className={styles.image}
-            />
-            <Image
-              src="/womanChar.png"
-              alt="woman character"
-              width={270}
-              height={270}
-              className={styles.image}
-            />
-          </div>
           <div className={styles.userValues}>
             <h1 className={styles.charInfo}>Peso: {user.weight} Kg</h1>
             <h1 className={styles.charInfo}>Altura: {user.height} m</h1>
             <h1 className={styles.charInfo}>Idade: {user.age} anos</h1>
+          </div>
+          <div className={styles.imageDiv}>
+            <Image
+              src="/noddle.png"
+              alt="noddle"
+              width={270}
+              height={270}
+              className={styles.image}
+            />
+            <Image
+              src="/meat.png"
+              alt="meat"
+              width={270}
+              height={270}
+              className={styles.image}
+            />
+            <Image
+              src="/avocado.png"
+              alt="avocado"
+              width={270}
+              height={270}
+              className={styles.image}
+            />
           </div>
         </div>
         <div className={styles.dietSide}>
@@ -164,30 +170,41 @@ const UserMainPage = () => {
       {isDialogOpen && (
         <dialog open className={styles.insertDiet}>
           <form onSubmit={handleCreateDiet}>
-            <label htmlFor="diet_name">Nome da Dieta:</label>
-            <input
-              type="text"
-              id="diet_name"
-              name="name"
-              value={newDiet.name}
-              onChange={handleChange}
-              required
-            />
-
-            <label htmlFor="diet_description">Descrição da Dieta:</label>
-            <input
-              type="text"
-              id="diet_description"
-              name="description"
-              value={newDiet.description}
-              onChange={handleChange}
-              required
-            />
-
-            <button type="submit">Criar Dieta</button>
-            <button type="button" onClick={() => setIsDialogOpen(false)}>
-              Cancelar
-            </button>
+            <div className={styles.inputGroup}>
+              <div className={styles.label}>Nome da Dieta:</div>
+              <input
+                type="text"
+                className={styles.input}
+                name="name"
+                value={newDiet.name}
+                onChange={handleChange}
+                required
+                autoFocus
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <div className={styles.label}>Descrição da Dieta:</div>
+              <input
+                type="text"
+                className={styles.input}
+                name="description"
+                value={newDiet.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className={styles.buttonContainer}>
+              <button type="submit" className={styles.submitButton}>
+                Criar Dieta
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsDialogOpen(false)}
+                className={styles.cancelButton}
+              >
+                Cancelar
+              </button>
+            </div>
           </form>
         </dialog>
       )}

@@ -16,7 +16,7 @@ const foodValidation = () => [
   body("name")
     .optional()
     .trim()
-    .isLength({ min: 3, max: 50 })
+    .isLength({ min: 1, max: 50 })
     .withMessage("Name must be between 3 and 50 characters long."),
 
   body("amount")

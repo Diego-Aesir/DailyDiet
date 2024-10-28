@@ -78,6 +78,7 @@ const mealsController = {
       return res.status(500).json({
         error: true,
         message: "Error deleting meal: " + error.message,
+        stack: error.stack,
       });
     }
   },

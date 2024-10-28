@@ -16,6 +16,22 @@ export const getAllDiets = async (user_id, token) => {
   return await response.json();
 };
 
+export const getDietFromId = async (user_id, diet_id, token) => {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch diets");
+  }
+
+  return await response.json();
+}
+
 export const postDiets = async (user_id, diet_name, diet_description, token) => {
   const response = await fetch(`${API_URL}/diets/${user_id}`, {
     method: "POST",
@@ -152,16 +168,13 @@ export const deleteMeal = async (user_id, diet_id, meal_id, token) => {
   return await response.json();
 };
 
-export const getAllFood = async (user_id, diet_id, meal_id, token) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
+export const getAllFoods = async (user_id, diet_id, meal_id, token) => {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      meals_id: meal_id,
-    }),
   });
 
   if (!response.ok) {
@@ -182,7 +195,7 @@ export const postFood = async (
   food_fat,
   token
 ) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -194,7 +207,6 @@ export const postFood = async (
       protein: food_protein,
       carbs: food_carbs,
       fat: food_fat,
-      meals_id: meal_id,
     }),
   });
 
@@ -208,6 +220,7 @@ export const postFood = async (
 export const putFood = async (
   user_id,
   diet_id,
+  meal_id,
   food_Id,
   food_name,
   food_amount,
@@ -216,7 +229,8 @@ export const putFood = async (
   food_fat,
   token
 ) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
+    method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -238,8 +252,8 @@ export const putFood = async (
   return await response.json();
 };
 
-export const deleteFood = async (user_id, diet_id, food_Id, token) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals/food`, {
+export const deleteFood = async (user_id, diet_id, meal_id, food_Id, token) => {
+  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

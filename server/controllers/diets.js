@@ -19,6 +19,25 @@ const dietsController = {
     }
   },
 
+  getDietById: async (req, res) => {
+    const diet_id = req.params.diet;
+
+    if (!diet_id) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Diet Id is required." });
+    }
+    try {
+      const diet = await db.getDietById(diet_id);
+      return res.status(200).json({ diet });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: true, message: "Error while retrieving diet " });
+    }
+
+  },
+
   postDiet: async (req, res) => {
     const id = req.params.id;
     const { name, description } = req.body;
@@ -62,7 +81,6 @@ const dietsController = {
   },
 
   deleteDiet: async (req, res) => {
-    console.log('Tentei');
     const diet = req.params.diet;
 
     if (!diet) {

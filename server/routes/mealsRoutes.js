@@ -10,6 +10,6 @@ router.get('/:id/:diet/meals', authenticateUser, mealController.getMeals);
 router.post('/:id/:diet/meals', authenticateUser, mealsValidator(), handleValidationErrors, mealController.postMeals);
 router.put('/:id/:diet/meals', authenticateUser, mealsValidator(), handleValidationErrors, mealController.putMeals);
 router.delete('/:id/:diet/meals', authenticateUser, mealController.deleteMeals);
-router.use('/:id/:diet/meals', foodRouter);
+router.use('/:id/:diet', foodRouter);
 
 module.exports = router;

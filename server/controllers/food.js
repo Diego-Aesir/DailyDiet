@@ -2,7 +2,7 @@ const db = require("../db/query");
 
 const foodController = {
   getFood: async (req, res) => {
-    const { meals_id } = req.body;
+    const meals_id = req.params.mealId;
 
     if (!meals_id) {
       return res
@@ -22,7 +22,8 @@ const foodController = {
   },
 
   postFood: async (req, res) => {
-    const { name, amount, protein, carbs, fat, meals_id } = req.body;
+    const meals_id = req.params.mealId;
+    const { name, amount, protein, carbs, fat} = req.body;
 
     if (!name || !amount || !protein || !carbs || !fat || !meals_id) {
       return res.status(400).json({
