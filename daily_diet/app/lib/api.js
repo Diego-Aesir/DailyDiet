@@ -30,9 +30,14 @@ export const getDietFromId = async (user_id, diet_id, token) => {
   }
 
   return await response.json();
-}
+};
 
-export const postDiets = async (user_id, diet_name, diet_description, token) => {
+export const postDiets = async (
+  user_id,
+  diet_name,
+  diet_description,
+  token
+) => {
   const response = await fetch(`${API_URL}/diets/${user_id}`, {
     method: "POST",
     headers: {
@@ -110,6 +115,10 @@ export const getAllMeals = async (user_id, diet_id, token) => {
   return await response.json();
 };
 
+export const downloadTaco = (user_id, diet_id) => {
+  return (window.location.href = `${API_URL}/diets/${user_id}/${diet_id}/meals/TACO`);
+};
+
 export const postMeal = async (user_id, diet_id, meal_name, token) => {
   const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/meals`, {
     method: "POST",
@@ -169,13 +178,16 @@ export const deleteMeal = async (user_id, diet_id, meal_id, token) => {
 };
 
 export const getAllFoods = async (user_id, diet_id, meal_id, token) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await fetch(
+    `${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to get all foods");
@@ -195,20 +207,23 @@ export const postFood = async (
   food_fat,
   token
 ) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: food_name,
-      amount: food_amount,
-      protein: food_protein,
-      carbs: food_carbs,
-      fat: food_fat,
-    }),
-  });
+  const response = await fetch(
+    `${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: food_name,
+        amount: food_amount,
+        protein: food_protein,
+        carbs: food_carbs,
+        fat: food_fat,
+      }),
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to post this food");
@@ -229,21 +244,24 @@ export const putFood = async (
   food_fat,
   token
 ) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      food_id: food_Id,
-      name: food_name,
-      amount: food_amount,
-      protein: food_protein,
-      carbs: food_carbs,
-      fat: food_fat,
-    }),
-  });
+  const response = await fetch(
+    `${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        food_id: food_Id,
+        name: food_name,
+        amount: food_amount,
+        protein: food_protein,
+        carbs: food_carbs,
+        fat: food_fat,
+      }),
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to put this food");
@@ -253,16 +271,19 @@ export const putFood = async (
 };
 
 export const deleteFood = async (user_id, diet_id, meal_id, food_Id, token) => {
-  const response = await fetch(`${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      food_id: food_Id,
-    }),
-  });
+  const response = await fetch(
+    `${API_URL}/diets/${user_id}/${diet_id}/${meal_id}/food`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        food_id: food_Id,
+      }),
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to delete this food");

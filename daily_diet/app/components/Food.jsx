@@ -34,18 +34,14 @@ export default function Food({ food, dietId, onUpdate }) {
   };
 
   const eraseFoodItem = async () => {
-    const confirmDelete = window.confirm(`Você tem certeza que deseja deletar ${food.name}?`);
+    const confirmDelete = window.confirm(
+      `Você tem certeza que deseja deletar ${food.name}?`
+    );
     if (confirmDelete) {
       try {
         const user_id = localStorage.getItem("user_id");
         const token = localStorage.getItem("token");
-        await deleteFood(
-          user_id,
-          dietId,
-          newFood.meals_id,
-          newFood.id,
-          token
-        );
+        await deleteFood(user_id, dietId, newFood.meals_id, newFood.id, token);
       } catch (error) {
         window.alert("Não foi possível deletar esse item: " + food.name);
       }
@@ -71,7 +67,7 @@ export default function Food({ food, dietId, onUpdate }) {
       <div className={styles.foodInformation}>
         <div className={styles.foodDisplay}>
           <div className={styles.foodRow}>
-            {['amount', 'name', 'protein', 'carbs', 'fat'].map((field) => (
+            {["amount", "name", "protein", "carbs", "fat"].map((field) => (
               <div className={styles.foodCell} key={field}>
                 {editField === field ? (
                   <input
@@ -84,14 +80,19 @@ export default function Food({ food, dietId, onUpdate }) {
                     autoFocus
                   />
                 ) : (
-                  <h2 className={styles.foodText} onClick={() => handleEdit(field)}>
+                  <h2
+                    className={styles.foodText}
+                    onClick={() => handleEdit(field)}
+                  >
                     {newFood[field]}
                   </h2>
                 )}
               </div>
             ))}
             <div className={styles.foodCell}>
-              <button onClick={eraseFoodItem} className={styles.deleteButton}>Deletar</button>
+              <button onClick={eraseFoodItem} className={styles.deleteButton}>
+                Deletar
+              </button>
             </div>
           </div>
         </div>

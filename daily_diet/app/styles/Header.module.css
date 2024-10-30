@@ -1,0 +1,58 @@
+.headerContainer {
+  background-color: #5c9b5a;
+  color: #ffffff;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 16px 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  align-items: center;
+}
+
+.loginContainer {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
+}
+
+.logo {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.dropdownTrigger {
+  position: relative;
+}
+
+.dropdownMenu {
+  display: block;
+  left: -100px;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  margin-top: 8px;
+  border-radius: 4px;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 10px 15px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: #f0f0f0;
+}

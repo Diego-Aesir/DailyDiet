@@ -1,0 +1,96 @@
+.container {
+  position: absolute;
+  background-color: white;
+  left: 10px;
+  top: 10vh;
+  height: 87vh;
+  width: 99vw;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.buttonBack {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 20px;
+}
+
+.buttonBack:hover {
+  background-color: #218838;
+}
+
+.content {
+  align-self: center;
+  flex: 1;
+  width: 60vw;
+  overflow-y: auto;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.5em;
+  color: #333;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.subtitle {
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.5;
+  margin: 5px 0 20px;
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+}
+
+.siteRef {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.siteRef:hover {
+  text-decoration: underline;
+}
+
+.downloadButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 20px 0;
+}
+
+.downloadButton:hover {
+  background-color: #0056b3;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+}
+
+.subheader {
+  font-size: 1.2em;
+  color: #333;
+  margin: 15px 0 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

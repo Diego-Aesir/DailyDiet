@@ -81,7 +81,13 @@
   transform: scale(1.02);
 }
 
+.dietContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .dietDiv {
+  height: 12vh;
   background-color: #ffffff;
   border-radius: 8px;
   padding: 15px;
@@ -106,6 +112,21 @@
   margin: 5px 0;
   color: #666;
   font-size: 0.95em;
+}
+
+.changeDiet {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.changeDiet:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
 }
 
 .deleteDiet {
@@ -184,6 +205,15 @@
 
 .buttonContainer {
   justify-content: center;
+  display: flex;
+  gap: 10px;
+}
+
+.buttonDietContainer {
+  position: relative;
+  top: -50px;
+  left: 10px;
+  width: fit-content;
   display: flex;
   gap: 10px;
 }

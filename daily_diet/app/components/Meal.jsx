@@ -106,8 +106,7 @@ export default function Meal({ meal, onUpdate, onDelete }) {
 
   const handleUpdateFoodDisplay = () => {
     getFood();
-
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -127,8 +126,17 @@ export default function Meal({ meal, onUpdate, onDelete }) {
           <h1 onClick={() => setEdit(true)}>{newMeal.name}</h1>
         )}
         <div className={styles.mealHeaderButtons}>
-          <button className={styles.button} onClick={() => setOpenFoodDialog(true)}> Nova comida</button>
-          <button className={styles.cancelButton} onClick={eraseMeal}> Apagar</button>
+          <button
+            className={styles.button}
+            onClick={() => setOpenFoodDialog(true)}
+          >
+            {" "}
+            Nova comida
+          </button>
+          <button className={styles.cancelButton} onClick={eraseMeal}>
+            {" "}
+            Apagar
+          </button>
         </div>
       </div>
       <div className={styles.foodSide}>
@@ -152,14 +160,31 @@ export default function Meal({ meal, onUpdate, onDelete }) {
           </div>
         </div>
         {food.map((item) => (
-          <Food key={item.id} food={item} dietId={meal.diet_id} onUpdate={handleUpdateFoodDisplay}></Food>
+          <Food
+            key={item.id}
+            food={item}
+            dietId={meal.diet_id}
+            onUpdate={handleUpdateFoodDisplay}
+          ></Food>
         ))}
       </div>
       <div className={styles.mealInformationContainer}>
-        <h4 className={styles.mealInformation}> Proteina: {parseFloat(meal.protein).toFixed(2)} </h4>
-        <h4 className={styles.mealInformation}> Carboidratos: {parseFloat(meal.carbs).toFixed(2)} </h4>
-        <h4 className={styles.mealInformation}> Gordura: {parseFloat(meal.fat).toFixed(2)} </h4>
-        <h4 className={styles.mealInformation}> Calorias: {parseFloat(meal.calories).toFixed(2)} </h4>
+        <h4 className={styles.mealInformation}>
+          {" "}
+          Proteina: {parseFloat(meal.protein).toFixed(2)}{" "}
+        </h4>
+        <h4 className={styles.mealInformation}>
+          {" "}
+          Carboidratos: {parseFloat(meal.carbs).toFixed(2)}{" "}
+        </h4>
+        <h4 className={styles.mealInformation}>
+          {" "}
+          Gordura: {parseFloat(meal.fat).toFixed(2)}{" "}
+        </h4>
+        <h4 className={styles.mealInformation}>
+          {" "}
+          Calorias: {parseFloat(meal.calories).toFixed(2)}{" "}
+        </h4>
       </div>
       {openFoodDialog && (
         <dialog open className={styles.foodDialog}>
@@ -181,7 +206,6 @@ export default function Meal({ meal, onUpdate, onDelete }) {
               <input
                 type="text"
                 className={styles.input}
-
                 name="name"
                 placeholder="Queijo"
                 value={newFood.name}
@@ -193,7 +217,6 @@ export default function Meal({ meal, onUpdate, onDelete }) {
               <input
                 type="number"
                 className={styles.input}
-
                 name="protein"
                 placeholder="20"
                 value={newFood.protein}
@@ -206,7 +229,6 @@ export default function Meal({ meal, onUpdate, onDelete }) {
               <input
                 type="number"
                 className={styles.input}
-
                 name="carbs"
                 placeholder="12"
                 value={newFood.carbs}
@@ -219,7 +241,6 @@ export default function Meal({ meal, onUpdate, onDelete }) {
               <input
                 type="number"
                 className={styles.input}
-
                 name="fat"
                 placeholder="2"
                 value={newFood.fat}
@@ -227,8 +248,14 @@ export default function Meal({ meal, onUpdate, onDelete }) {
               ></input>
               <p>g</p>
             </div>
-            <button className={styles.button} type="submit">Salvar</button>
-            <button className={styles.cancelButton} type="button" onClick={() => setOpenFoodDialog(false)}>
+            <button className={styles.button} type="submit">
+              Salvar
+            </button>
+            <button
+              className={styles.cancelButton}
+              type="button"
+              onClick={() => setOpenFoodDialog(false)}
+            >
               Cancelar
             </button>
           </form>

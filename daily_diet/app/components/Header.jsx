@@ -2,14 +2,16 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getUserInfo } from "@/app/lib/api";
-import styles from "../styles/header.module.css";
+import styles from "../styles/Header.module.css";
 
 export default function Header() {
   const route = useRouter();
   const [logged, setLogged] = useState(false);
   const [user, setUser] = useState(null);
+  const [dropdown, openDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const fetchUserInfo = async () => {
     const user_id = localStorage.getItem("user_id");
@@ -17,6 +19,7 @@ export default function Header() {
 
     if (!user_id || !token) {
       setLogged(false);
+      setUser(null);
       return;
     }
 
@@ -27,12 +30,30 @@ export default function Header() {
     } catch (error) {
       console.error("Erro ao obter informações do usuário:", error.message);
       setLogged(false);
-      await fetchUserInfo();
     }
   };
 
   useEffect(() => {
     fetchUserInfo();
+
+    const interval = setInterval(() => {
+      fetchUserInfo();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        openDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const mainPage = () => {
@@ -49,7 +70,24 @@ export default function Header() {
 
   const pushUserPage = () => {
     const user_id = localStorage.getItem("user_id");
+    openDropdown(false);
     route.push(`/${user_id}`);
+  };
+
+  const pushUserSettingsPage = () => {
+    const user_id = localStorage.getItem("user_id");
+    openDropdown(false);
+    route.push(`/${user_id}/settings`);
+  };
+
+  const userLogout = () => {
+    if (window.confirm("Tem certeza que deseja sair?")) {
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("token");
+      setLogged(false);
+      setUser(null);
+      route.push("/");
+    }
   };
 
   return (
@@ -61,22 +99,43 @@ export default function Header() {
         {!logged ? (
           <>
             <h3 className={styles.logo} onClick={pushLogin}>
-              Entrar{" "}
+              Entrar
             </h3>
             <h3 className={styles.logo} onClick={pushRegister}>
               Registrar-se
             </h3>
             <Image
               src="/login_icon.png"
-              alt="User Icon"
+              alt="Ícone de Usuário"
               width={50}
               height={50}
             />
           </>
         ) : (
-          <h3 className={styles.logo} onClick={pushUserPage}>
-            {user?.username}
-          </h3>
+          <div className={styles.dropdownTrigger}>
+            <h3
+              className={styles.logo}
+              onClick={() => openDropdown((prev) => !prev)}
+            >
+              {user?.username}
+            </h3>
+            {dropdown && (
+              <div className={styles.dropdownMenu} ref={dropdownRef}>
+                <h3 className={styles.dropdownItem} onClick={pushUserPage}>
+                  Minhas Dietas
+                </h3>
+                <h3
+                  className={styles.dropdownItem}
+                  onClick={pushUserSettingsPage}
+                >
+                  Configurações
+                </h3>
+                <h3 className={styles.dropdownItem} onClick={userLogout}>
+                  Sair
+                </h3>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>

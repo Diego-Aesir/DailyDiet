@@ -165,7 +165,7 @@ const createNewDiet = async (name, description, user_id) => {
 };
 
 const getAllDiets = async (user_id) => {
-  const sql = `SELECT * FROM diets WHERE user_id = $1`;
+  const sql = `SELECT * FROM diets WHERE user_id = $1 ORDER BY id ASC`;
   try {
     const { rows: diets } = await pool.query(sql, [user_id]);
     return diets;
@@ -332,7 +332,7 @@ const createNewFood = async (name, amount, protein, carbs, fat, meals_id) => {
 };
 
 const getAllFoodByMeal = async (meals_id) => {
-  const sql = `SELECT * FROM food WHERE meals_id = $1`;
+  const sql = `SELECT * FROM food WHERE meals_id = $1 ORDER BY id ASC`;
   try {
     const { rows: foodItems } = await pool.query(sql, [meals_id]);
     return foodItems;

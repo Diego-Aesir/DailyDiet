@@ -26,7 +26,9 @@ export default function Register() {
     }
 
     if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      setError("O nome de usuário pode conter apenas letras, números e underscores.");
+      setError(
+        "O nome de usuário pode conter apenas letras, números e underscores."
+      );
       return false;
     }
 
@@ -105,7 +107,9 @@ export default function Register() {
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="username" className={styles.label}>Nome de usuário:</label>
+            <label htmlFor="username" className={styles.label}>
+              Nome de usuário:
+            </label>
             <input
               type="text"
               id="username"
@@ -118,7 +122,9 @@ export default function Register() {
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>Senha:</label>
+            <label htmlFor="password" className={styles.label}>
+              Senha:
+            </label>
             <input
               type="password"
               id="password"
@@ -131,7 +137,9 @@ export default function Register() {
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="weight" className={styles.label}>Peso (kg):</label>
+            <label htmlFor="weight" className={styles.label}>
+              Peso (kg):
+            </label>
             <input
               type="number"
               id="weight"
@@ -144,7 +152,9 @@ export default function Register() {
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="height" className={styles.label}>Altura (m):</label>
+            <label htmlFor="height" className={styles.label}>
+              Altura (m):
+            </label>
             <input
               type="text"
               id="height"
@@ -157,7 +167,9 @@ export default function Register() {
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="age" className={styles.label}>Idade (anos):</label>
+            <label htmlFor="age" className={styles.label}>
+              Idade (anos):
+            </label>
             <input
               type="number"
               id="age"
@@ -169,7 +181,9 @@ export default function Register() {
               className={styles.input}
             />
           </div>
-          <button type="submit" className={styles.submitButton}>Registrar</button>
+          <button type="submit" className={styles.submitButton}>
+            Registrar
+          </button>
         </form>
       </div>
     </div>

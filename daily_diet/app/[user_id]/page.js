@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAllDiets, getUserInfo, postDiets, deleteDiets } from "../lib/api";
+import {
+  getAllDiets,
+  getUserInfo,
+  postDiets,
+  putDiets,
+  deleteDiets,
+} from "../lib/api";
 import Image from "next/image";
 import styles from "@/app/styles/userMainPage.module.css";
 import { useRouter } from "next/navigation";
@@ -13,6 +19,8 @@ const UserMainPage = () => {
   const [newDiet, setNewDiet] = useState({ name: "", description: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [alterDiet, setAlterDiet] = useState(false);
+  const [dietId, setDietId] = useState(null);
 
   const getDiets = async () => {
     setIsLoading(true);
@@ -73,7 +81,6 @@ const UserMainPage = () => {
 
   const openDiet = (diet_id) => {
     const user_id = localStorage.getItem("user_id");
-
     router.push(`/${user_id}/${diet_id}`);
   };
 
@@ -90,6 +97,24 @@ const UserMainPage = () => {
       await deleteDiets(user_id, diet_id, token);
       await getDiets();
       router.push(`/${user_id}`);
+    } catch (error) {
+      window.alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const changeDiet = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const user_id = localStorage.getItem("user_id");
+    const token = localStorage.getItem("token");
+    try {
+      await putDiets(user_id, dietId, newDiet.name, newDiet.description, token);
+      setNewDiet({ name: "", description: "" });
+      await getDiets();
+      setAlterDiet(false);
+      setDietId();
     } catch (error) {
       window.alert(error.message);
     } finally {
@@ -146,19 +171,34 @@ const UserMainPage = () => {
 
             {diets.length > 0 ? (
               diets.map((diet) => (
-                <div
-                  key={diet.id}
-                  className={styles.dietDiv}
-                  onClick={() => openDiet(diet.id)}
-                >
-                  <h1 className={styles.dietName}>{diet.name}</h1>
-                  <h2 className={styles.dietDescription}>{diet.description}</h2>
-                  <button
-                    className={styles.deleteDiet}
-                    onClick={() => deleteDiet(diet.id)}
+                <div key={diet.id} className={styles.dietContainer}>
+                  <div
+                    className={styles.dietDiv}
+                    onClick={() => openDiet(diet.id)}
                   >
-                    Apagar dieta
-                  </button>
+                    <h1 className={styles.dietName}>{diet.name}</h1>
+                    <h2 className={styles.dietDescription}>
+                      {diet.description}
+                    </h2>
+                  </div>
+
+                  <div className={styles.buttonDietContainer}>
+                    <button
+                      className={styles.changeDiet}
+                      onClick={() => {
+                        setAlterDiet(true);
+                        setDietId(diet.id);
+                      }}
+                    >
+                      Alterar Dieta
+                    </button>
+                    <button
+                      className={styles.deleteDiet}
+                      onClick={() => deleteDiet(diet.id)}
+                    >
+                      Apagar Dieta
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -200,6 +240,48 @@ const UserMainPage = () => {
               <button
                 type="button"
                 onClick={() => setIsDialogOpen(false)}
+                className={styles.cancelButton}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </dialog>
+      )}
+
+      {alterDiet && (
+        <dialog open className={styles.insertDiet}>
+          <form onSubmit={changeDiet}>
+            <div className={styles.inputGroup}>
+              <div className={styles.label}>Novo Nome da Dieta:</div>
+              <input
+                type="text"
+                className={styles.input}
+                name="name"
+                value={newDiet.name}
+                onChange={handleChange}
+                required
+                autoFocus
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <div className={styles.label}>Nova Descrição:</div>
+              <input
+                type="text"
+                className={styles.input}
+                name="description"
+                value={newDiet.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className={styles.buttonContainer}>
+              <button type="submit" className={styles.submitButton}>
+                Alterar Dieta
+              </button>
+              <button
+                type="button"
+                onClick={() => setAlterDiet(false)}
                 className={styles.cancelButton}
               >
                 Cancelar

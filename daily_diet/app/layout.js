@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
         <title>Daily Diet</title>
       </head>
       <body>
-        <Header/>
+        <Header />
         {children}
       </body>
     </html>

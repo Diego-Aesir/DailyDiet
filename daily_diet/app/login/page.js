@@ -24,16 +24,16 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const response = await postLogin(formData.username, formData.password);
+      const { user_id, token } = response;
+
+      localStorage.setItem("user_id", user_id);
+      localStorage.setItem("token", token);
+
+      router.push(`/${user_id}`);
     } catch (error) {
-      setError(error.message);
+      setError("Parece que sua senha ou seu nome de usuário estão incorretos.");
     }
-    const response = await postLogin(formData.username, formData.password);
-    const { user_id, token } = response;
-
-    localStorage.setItem("user_id", user_id);
-    localStorage.setItem("token", token);
-
-    router.push(`/${user_id}`);
   };
 
   return (
@@ -71,7 +71,7 @@ const LoginPage = () => {
             />
           </div>
           <button type="submit" className={styles.submitButton}>
-            Login
+            Entrar
           </button>
         </form>
       </div>

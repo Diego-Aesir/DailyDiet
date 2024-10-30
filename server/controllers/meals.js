@@ -1,4 +1,5 @@
 const db = require("../db/query");
+const path = require('path');
 
 const mealsController = {
   getMeals: async (req, res) => {
@@ -19,6 +20,17 @@ const mealsController = {
         message: "Error retrieving meals: " + error.message,
       });
     }
+  },
+
+  downloadTaco: async (req, res) => {
+    const file = path.join(__dirname, '../files', 'Tabela TACO.pdf');
+    res.download(file, (error) => {
+      if (error) {
+          res.status(500).json({
+            error:true,
+            message: "Couldn\'t donwload file " + error.message,
+          });
+      }});
   },
 
   postMeals: async (req, res) => {

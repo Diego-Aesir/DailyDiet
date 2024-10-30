@@ -1,8 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDietFromId, getAllMeals, postMeal } from "@/app/lib/api";
+import {
+  getUserInfo,
+  getDietFromId,
+  getAllMeals,
+  postMeal,
+} from "@/app/lib/api";
 import Meal from "@/app/components/Meal";
+import Tutorial from "@/app/components/Tutorial";
 
 import styles from "@/app/styles/dietPage.module.css";
 
@@ -16,6 +22,17 @@ const DietPage = () => {
   const [newMeal, setNewMeal] = useState({
     name: "",
   });
+  const [user, setUser] = useState();
+  const [tutorial, setTutorial] = useState(false);
+
+  const getUser = async () => {
+    try {
+      const response = await getUserInfo(user_id, token);
+      setUser(response);
+    } catch (error) {
+      window.alert("Não foi possível encontrar este usuario.");
+    }
+  };
 
   const getDiet = async () => {
     try {
@@ -31,14 +48,12 @@ const DietPage = () => {
     try {
       const response = await getAllMeals(user_id, diet_id, token);
       setMeals(response.allMeals);
-      console.log(response.allMeals);
     } catch (error) {
       window.alert("Não foi possível obter suas refeições.");
     }
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem("token"));
     setUserId(localStorage.getItem("user_id"));
     setToken(localStorage.getItem("token"));
     const currentUrl = window.location.href;
@@ -49,6 +64,7 @@ const DietPage = () => {
 
   useEffect(() => {
     if (diet_id) {
+      getUser();
       getDiet();
     }
   }, [diet_id]);
@@ -80,6 +96,15 @@ const DietPage = () => {
     await getDiet();
   };
 
+  const calculateGCD = (user) => {
+    const { weight, height, age } = user;
+    const bmr = 66.47 + 13.75 * weight + 5 * (height * 100) - 6.8 * age;
+    const factorActivity = 1.1;
+
+    const gcd = bmr * factorActivity;
+    return gcd;
+  };
+
   return (
     <div className={styles.background}>
       <div className={styles.container}>
@@ -106,23 +131,44 @@ const DietPage = () => {
           </div>
         </div>
         {diet !== null ? (
-          <div className={styles.dietMacroContainer}>
-            <h3 className={styles.dietMacroItem}>
-              <span className={styles.macroLabel}>Proteína:</span>{" "}
-              {parseFloat(diet.protein).toFixed(2)}g
-            </h3>
-            <h3 className={styles.dietMacroItem}>
-              <span className={styles.macroLabel}>Carboidratos:</span>{" "}
-              {parseFloat(diet.carbs).toFixed(2)}g
-            </h3>
-            <h3 className={styles.dietMacroItem}>
-              <span className={styles.macroLabel}>Gordura:</span>{" "}
-              {parseFloat(diet.fat).toFixed(2)}g
-            </h3>
-            <h3 className={styles.dietMacroItem}>
-              <span className={styles.macroLabel}>Calorias:</span>{" "}
-              {parseFloat(diet.calories).toFixed(2)}
-            </h3>
+          <div className={styles.dietSide}>
+            <div className={styles.dietMacroContainer}>
+              <h3 className={styles.dietMacroItem}>
+                <span className={styles.macroLabel}>Proteína:</span>{" "}
+                {parseFloat(diet.protein).toFixed(2)}g
+              </h3>
+              <h3 className={styles.dietMacroItem}>
+                <span className={styles.macroLabel}>Carboidratos:</span>{" "}
+                {parseFloat(diet.carbs).toFixed(2)}g
+              </h3>
+              <h3 className={styles.dietMacroItem}>
+                <span className={styles.macroLabel}>Gordura:</span>{" "}
+                {parseFloat(diet.fat).toFixed(2)}g
+              </h3>
+              <h3 className={styles.dietMacroItem}>
+                <span className={styles.macroLabel}>Calorias:</span>{" "}
+                {parseFloat(diet.calories).toFixed(2)}
+              </h3>
+              <h3 className={styles.dietMacroItem}>
+                <span className={styles.macroLabel}>Diferença:</span>{" "}
+                {parseFloat(diet.calories - calculateGCD(user)).toFixed(2)}
+              </h3>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <button
+                className={styles.submitButton}
+                onClick={() => setTutorial(true)}
+              >
+                {" "}
+                Tutorial{" "}
+              </button>
+            </div>
           </div>
         ) : (
           console.log("")
@@ -158,6 +204,7 @@ const DietPage = () => {
           </form>
         </dialog>
       )}
+      {tutorial && <Tutorial onCancel={() => setTutorial(false)} />}
     </div>
   );
 };

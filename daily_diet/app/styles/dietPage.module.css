@@ -1,11 +1,12 @@
 .background {
   background-color: #f0f4f8;
   padding: 20px;
-  min-height: 100vh;
+  overflow: auto;
 }
 
 .container {
   display: flex;
+  height: 88vh;
   border-radius: 12px;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
   overflow: auto;
@@ -18,11 +19,15 @@
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow-y: scroll;
+}
+
+.dietSide {
+  display: flex;
+  flex-direction: column;
 }
 
 .dietMacroContainer {
-  display: flex;
-  flex-direction: column;
   padding: 20px;
   margin-top: 15px;
 }
@@ -46,6 +51,10 @@
 }
 
 .createNewMealButton {
+  position: fixed;
+  top: 12vh;
+  left: 78vw;
+  font-weight: bolder;
   margin-bottom: 20px;
   background-color: #007bff;
   color: white;
@@ -101,6 +110,7 @@
 
 .submitButton {
   background-color: #28a745;
+  font-weight: bolder;
   color: white;
   border: none;
   border-radius: 5px;
@@ -115,6 +125,7 @@
 
 .cancelButton {
   background-color: #dc3545;
+  font-weight: bolder;
   color: white;
   border: none;
   border-radius: 5px;

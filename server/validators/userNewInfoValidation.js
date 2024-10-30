@@ -1,15 +1,15 @@
 const { body } = require("express-validator");
 
-const userNewInfoValidation = () => [
+const userNewUsername = () => [
   body("newUsername")
     .trim()
     .isLength({ min: 3, max: 30 })
     .withMessage("Username must be between 3 and 30 characters long.")
     .matches(/^[a-zA-Z0-9_]+$/)
-    .withMessage(
-      "New username can only contain letters, numbers, and underscores."
-    ),
+    .withMessage("New username can only contain letters, numbers, and underscores."),
+];
 
+const userNewPassword = () => [
   body("newPassword")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long.")
@@ -17,7 +17,9 @@ const userNewInfoValidation = () => [
     .withMessage("Password must contain at least one number.")
     .matches(/[!@#$%^&*(),.?":{}|<>]/)
     .withMessage("Password must contain at least one special character."),
+];
 
+const userNewWeight = () => [
   body("newWeight")
     .trim()
     .isNumeric()
@@ -29,16 +31,21 @@ const userNewInfoValidation = () => [
       }
       return true;
     }),
+];
 
-    body("newHeight")
+const userNewHeight = () => [
+  body("newHeight")
     .custom((value) => {
       const height = parseFloat(value);
       if (isNaN(height) || height < 0.3 || height > 3.0) {
         throw new Error("Height must be a number between 0.30 and 3.00 meters.");
       }
       return true;
-    }).withMessage("Height must be a valid number."),
+    })
+    .withMessage("Height must be a valid number."),
+];
 
+const userNewAge = () => [
   body("newAge")
     .trim()
     .isNumeric()
@@ -52,4 +59,10 @@ const userNewInfoValidation = () => [
     }),
 ];
 
-module.exports = userNewInfoValidation;
+module.exports = {
+  userNewUsername,
+  userNewPassword,
+  userNewWeight,
+  userNewHeight,
+  userNewAge,
+};
