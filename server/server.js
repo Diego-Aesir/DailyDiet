@@ -10,7 +10,10 @@ const {fieldsValidation, handleValidationErrors} = require('./validators/fieldsV
 const loginValidation = require('./validators/loginValidation');
 
 const PORT = 8000;
-const allowed = ['http://localhost:3000'];
+const allowed = ['http://localhost:3000',
+    'http://localhost:10000',
+    'https://dailydiet-w32v.onrender.com'
+];
 
 app.use(cors({
     origin: allowed,
