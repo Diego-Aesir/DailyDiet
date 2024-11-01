@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+require('dotenv').config();
 const registerController = require('./controllers/register');
 const loginController = require('./controllers/login');
 const userRoutes = require('./routes/userPageRoutes');
@@ -9,10 +10,10 @@ const initDB = require('./db/createDB');
 const {fieldsValidation, handleValidationErrors} = require('./validators/fieldsValidation');
 const loginValidation = require('./validators/loginValidation');
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const allowed = ['http://localhost:3000',
     'http://localhost:10000',
-    'https://dailydiet-w32v.onrender.com'
+    process.env.APPLICATION
 ];
 
 app.use(cors({

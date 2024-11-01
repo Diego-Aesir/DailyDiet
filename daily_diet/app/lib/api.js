@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "https://dailydiet-i1ap.onrender.com";
 
 export const getAllDiets = async (user_id, token) => {
   const response = await fetch(`${API_URL}/diets/${user_id}`, {
